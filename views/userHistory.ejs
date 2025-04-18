@@ -1,0 +1,44 @@
+<div class="container">
+    <h2>
+      <%= session.user.userName %> (<%= session.user.email %>) History
+    </h2>
+    <hr />
+  
+    <% if (session.user.loginHistory && session.user.loginHistory.length> 0) { %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Login Date/Time</th>
+            <th>Client Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% session.user.loginHistory.forEach(entry=> { 
+                const date = new Date(entry.dateTime);
+                const formattedDate = date.toLocaleString('en-US', {
+                  timeZone: 'America/New_York',
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  timeZoneName: 'long'
+                }); 
+           %>
+            <tr>
+              <td>
+                <%= formattedDate %>
+              </td>
+              <td>
+                <%= entry.userAgent %>
+              </td>
+            </tr>
+            <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <div class="alert alert-info">No login history available.</div>
+        <% } %>
+  </div>

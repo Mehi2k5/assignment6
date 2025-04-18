@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <!-- Bootstrap & jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <% if (data.message) { %>
+            <div class="alert alert-warning">
+                <%= data.message %>
+            </div>
+            <% } %>
+
+                <% if (data.categoriesMessage) { %>
+                    <div class="alert alert-warning">
+                        <%= data.categoriesMessage %>
+                    </div>
+                    <% } %>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="list-group">
+                                    <a href="/shop"
+                                        class="list-group-item list-group-item-action <%= viewingCategory === '' ? 'active' : '' %>">
+                                        All Categories
+                                    </a>
+                                    <% data.categories.forEach(cat=> { %>
+                                        <a href="/shop?category=<%= cat.id %>"
+                                            class="list-group-item list-group-item-action <%= viewingCategory == cat.id ? 'active' : '' %>">
+                                            <%= cat.category %>
+                                        </a>
+                                        <% }); %>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <% if (data.post) { %>
+                                    <div class="card mb-4">
+                                        <img src="<%= data.post.featureImage %>" class="card-img-top"
+                                            alt="<%= data.post.title %>">
+                                        <div class="card-body">
+                                            <h2 class="card-title">
+                                                <%= data.post.title %>
+                                            </h2>
+                                            <p class="card-text">
+                                                <%= data.post.body %>
+                                            </p>
+                                            <p class="text-muted">
+                                                Posted on: <%= new Date(data.post.postDate).toISOString().split('T')[0]
+                                                    %> |
+                                                    Price: $<%= data.post.price.toFixed(2) %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+                                        <div class="row">
+                                            <% if (data.posts.length> 0) { %>
+                                                <% data.posts.forEach(post=> { %>
+                                                    <div class="col-lg-4 col-md-6 mb-4">
+                                                        <div class="card h-100">
+                                                            <% if (post.featureImage) { %>
+                                                                <img src="<%= post.featureImage %>" class="card-img-top"
+                                                                    alt="<%= post.title %>">
+                                                                <% } %>
+                                                                    <div class="card-body">
+                                                                        <h5 class="card-title">
+                                                                            <%= post.title %>
+                                                                        </h5>
+                                                                        <p class="card-text">
+                                                                            <%= post.body.substring(0, 100) %>...
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="card-footer bg-transparent">
+                                                                        <a href="/shop/<%= post.id %>?category=<%= viewingCategory %>"
+                                                                            class="btn btn-primary">
+                                                                            View Details
+                                                                        </a>
+                                                                        <span class="float-end text-muted">$<%=
+                                                                                post.price.toFixed(2) %></span>
+                                                                    </div>
+                                                        </div>
+                                                    </div>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <div class="col-12">
+                                                                <div class="alert alert-info">
+                                                                    No items found in this category.
+                                                                    <% if (viewingCategory !=='' ) { %>
+                                                                        <a href="/shop" class="alert-link">View all
+                                                                            items</a>
+                                                                        <% } %>
+                                                                </div>
+                                                            </div>
+                                                            <% } %>
+                                        </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.querySelectorAll('.nav-link').forEach(link => {
+                                if (link.href === window.location.href) {
+                                    link.classList.add('active');
+                                    link.setAttribute('aria-current', 'page');
+                                }
+                            });
+                        </script>
+</body>
+
+</html>
