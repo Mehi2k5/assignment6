@@ -21,6 +21,7 @@ const path = require("path");
 const app = express();
 const clientSessions = require("client-sessions");
 const expressLayouts = require('express-ejs-layouts');
+const upload = multer();
 const PORT = process.env.PORT || 8080;
 
 const studentName = "Huynh Huy Hoang";
@@ -74,8 +75,6 @@ cloudinary.config({
     secure: true
 });
 
-const upload = multer(); 
-
 storeService
   .initialize()
   .then(authData.initialize) 
@@ -109,11 +108,6 @@ app.get("/about", (req, res) => {
     res.render("about", { title: "About Huynh Huy Hoang" });
 });
 
-app.get('/main', (req, res) => {
-    res.render('home');
-  });
-  
-
 app.get("/shop", async (req, res) => {
     try {
         const category = req.query.category || '';
@@ -135,8 +129,7 @@ app.get("/shop", async (req, res) => {
             viewingCategory: category
         });
     } catch (err) {
-        console.error("Error in /shop route:", err);
-        res.render("shop", {
+        res.render("404", {
             data: {
                 post: null,
                 posts: [],
@@ -303,7 +296,7 @@ app.get("/categories/add", ensureLogin, (req, res) => {
         });
 });
 
-app.post("/categories/add", ensureLogin, upload.single("featureImage"), ensureLogin, async (req, res) => {
+app.post("/categories/add", ensureLogin, upload.single("featureImage"), async (req, res) => {
     try {
         await storeService.addCategory(req.body);
         res.redirect("/categories");
@@ -342,11 +335,18 @@ app.get("/items/delete/:id", ensureLogin, (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    res.render("login");
+    res.render("login", {
+        errorMessage: "",
+        userName: ""
+      });
 });
   
   app.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register", {
+        errorMessage: "",
+        successMessage: "",
+        userName: ""
+      });
 });
   
   app.post("/register", (req, res) => {
