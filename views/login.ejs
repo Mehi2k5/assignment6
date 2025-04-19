@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="stylesheet" href="/css/main.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="/public/main.css">
     <!-- Bootstrap & jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -26,7 +29,7 @@
                     <% } %>
 
                         <form action="/login" method="POST"
-                            class="bg-secondary p-4 rounded shadow-sm border border-secondary">
+                            class="text-white bg-dark p-4 rounded shadow-sm border border-secondary">
                             <div class="mb-3">
                                 <label for="userName" class="form-label">User Name</label>
                                 <input type="text" class="form-control" id="userName" name="userName"
@@ -40,11 +43,10 @@
                                     placeholder="Password" required>
                             </div>
 
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Login</button>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary position-relative">Login</button>
                             </div>
                         </form>
-
             </div>
         </div>
     </main>

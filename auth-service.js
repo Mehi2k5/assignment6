@@ -82,15 +82,15 @@ function checkUser(userData) {
                                     { $set: { loginHistory: users[0].loginHistory } }
                                 )
                                     .then(() => resolve(users[0]))
-                                    .catch(err => reject("Failed to verify user name: " + err));
+                                    .catch(err => reject("Cannot verify right user name: " + err));
                             } else {
-                                reject("Wrong Passowrd: " + userData.userName);
+                                reject("Password Incorrect: " + userData.userName);
                             }
                         });
                 }
             })
             .catch(() => {
-                reject("We have found no user name: " + userData.userName);
+                reject("No username in database match: " + userData.userName);
             });
     });
 }

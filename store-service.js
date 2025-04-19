@@ -19,7 +19,6 @@ let sequelize = new Sequelize(
   }
 );
 
-// define models
 const Category = sequelize.define('Category', {
   category: {
     type: Sequelize.STRING,
@@ -49,20 +48,16 @@ const Item = sequelize.define('Item', {
   }
 });
 
-// define relationships
 Item.belongsTo(Category, { foreignKey: 'category' });
 
-// Functions
 function initialize() {
   return new Promise((resolve, reject) => {
     sequelize.sync()
       .then(() => {
-        console.log("Database synchronized successfully.");
         resolve();
       })
       .catch((err) => {
-        console.error("Unable to sync the database:", err);
-        reject("unable to sync the database");
+        reject("unable to sync the database", err);
       });
   });
 }
@@ -72,8 +67,7 @@ function getAllItems() {
     Item.findAll()
       .then(data => resolve(data))
       .catch(err => {
-        console.error("Database error in getAllItems:", err);
-        reject("Database operation failed");
+        reject("no results returned", err);
       });
   });
 }
@@ -86,8 +80,7 @@ function getItemsByCategory(category) {
     })
       .then((data) => resolve(data))
       .catch((err) => {
-        console.error("Error getting items by category:", err);
-        reject("no results returned");
+        reject("no results returned", err);
       });
   });
 }
@@ -105,7 +98,6 @@ function getItemsByMinDate(minDateStr) {
     })
       .then((data) => resolve(data))
       .catch((err) => {
-        console.error("Error getting items by min date:", err);
         reject("no results returned");
       });
   });
@@ -118,8 +110,7 @@ function getPublishedItems() {
     })
       .then(data => resolve(data))
       .catch(err => {
-        console.error("Error getting published items:", err);
-        reject("no published items found");
+        reject("no published items found", err);
       });
   });
 }
@@ -135,8 +126,7 @@ function getPublishedItemsByCategory(category) {
     })
       .then((data) => resolve(data))
       .catch((err) => {
-        console.error("Error getting published items by category:", err);
-        reject("no results returned");
+        reject("no results returned", err);
       });
   });
 }
@@ -155,8 +145,7 @@ function getItemById(id) {
         }
       })
       .catch(err => {
-        console.error("Error getting item by ID:", err);
-        reject("no results returned");
+        reject("no results returned", err);
       });
   });
 }
@@ -177,12 +166,10 @@ function addItem(itemData) {
       Item.create(itemData)
         .then(result => resolve(result))
         .catch(err => {
-          console.error("Error adding item:", err);
-          reject("unable to create post");
+          reject("unable to create item");
         });
-    } catch (error) {
-      console.error("Error in addItem:", error);
-      reject("unable to create post");
+    } catch (err) {
+      reject("unable to create item", err);
     }
   });
 }
@@ -199,13 +186,11 @@ function deletePostById(id) {
         Item.destroy({ where: { id: id } })
           .then(() => resolve())
           .catch(err => {
-            console.error("Error deleting item:", err);
-            reject("unable to delete item");
+            reject("unable to delete item", err);
           });
       })
       .catch(err => {
-        console.error("Error finding item:", err);
-        reject("unable to find item");
+        reject("unable to find item", err);
       });
   });
 }
@@ -215,8 +200,7 @@ function getCategories() {
     Category.findAll()
       .then(data => resolve(data))
       .catch(err => {
-        console.error("Error getting categories:", err);
-        reject("no results returned");
+        reject("no results returned", err);
       });
   });
 }
@@ -232,8 +216,7 @@ function addCategory(categoryData) {
     Category.create(categoryData)
       .then(() => resolve())
       .catch(err => {
-        console.error("Error adding category:", err);
-        reject("unable to create category");
+        reject("unable to create category", err);
       });
   });
 }
@@ -250,13 +233,11 @@ function deleteCategoryById(id) {
         Category.destroy({ where: { id: id } })
           .then(() => resolve())
           .catch(err => {
-            console.error("Error deleting category:", err);
-            reject("unable to delete category");
+            reject("unable to delete category", err);
           });
       })
       .catch(err => {
-        console.error("Error finding category:", err);
-        reject("unable to find category");
+        reject("unable to find category", err);
       });
   });
 }

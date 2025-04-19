@@ -23,6 +23,9 @@ const clientSessions = require("client-sessions");
 const expressLayouts = require('express-ejs-layouts');
 const PORT = process.env.PORT || 8080;
 
+const studentName = "Huynh Huy Hoang";
+const studentId = "151569233";
+
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -33,8 +36,6 @@ app.use(expressLayouts);
 app.set("views", path.join(__dirname, "views"));
 app.set('layout', 'layouts/main');
 
-const studentName = "Huynh Huy Hoang";
-const studentId = "151569233";
 
 app.use(clientSessions({
     cookieName: "session", 
@@ -96,7 +97,6 @@ storeService
     next();
   }  
 
-// home route redirects to shop
 app.get("/", (req, res) => {
     res.redirect("/shop");
 });
@@ -105,7 +105,6 @@ app.get('/main', (req, res) => {
     res.render('home', { layout: 'layouts/main' });
   });
 
-// About page
 app.get("/about", (req, res) => {
     res.render("about", { title: "About Huynh Huy Hoang" });
 });
@@ -115,7 +114,6 @@ app.get('/main', (req, res) => {
   });
   
 
-// Shop page with published items
 app.get("/shop", async (req, res) => {
     try {
         const category = req.query.category || '';
@@ -143,14 +141,13 @@ app.get("/shop", async (req, res) => {
                 post: null,
                 posts: [],
                 categories: [],
-                message: "Error loading items",
-                categoriesMessage: "Error loading categories"
+                message: "Unable to load items",
+                categoriesMessage: "Unable to load categories"
             }
         });
     }
 });
 
-// single item view in shop
 app.get("/shop/:id",  (req, res) => {
     const itemId = req.params.id;
     const category = req.query.category || '';
@@ -201,7 +198,6 @@ app.get("/shop/:id",  (req, res) => {
         });
 });
 
-// Items list
 app.get("/items", ensureLogin, (req, res) => {
     storeService.getAllItems()
         .then(items => {
@@ -219,7 +215,7 @@ app.get("/items", ensureLogin, (req, res) => {
         });
 });
 
-// Add item form
+
 app.get("/items/add", ensureLogin, (req, res) => {
     storeService.getCategories()
         .then(categories => {
@@ -239,7 +235,6 @@ app.get("/items/add", ensureLogin, (req, res) => {
         });
 });
 
-// Process item addition
 app.post("/items/add", ensureLogin, upload.single("featureImage"), async (req, res) => {
     let imageUrl = "";
     if (req.file) {
@@ -278,7 +273,6 @@ app.post("/items/add", ensureLogin, upload.single("featureImage"), async (req, r
     }
 });
   
-// Categories list
 app.get("/categories", ensureLogin, (req, res) => {
     storeService.getCategories()
       .then(categories => {
@@ -296,7 +290,6 @@ app.get("/categories", ensureLogin, (req, res) => {
       });
   });
 
-// Process category addition
 app.get("/categories/add", ensureLogin, (req, res) => {
     storeService.addCategory(req.body)
         .then(() => {
@@ -310,7 +303,6 @@ app.get("/categories/add", ensureLogin, (req, res) => {
         });
 });
 
-// add new category to the database
 app.post("/categories/add", ensureLogin, upload.single("featureImage"), ensureLogin, async (req, res) => {
     try {
         await storeService.addCategory(req.body);
@@ -321,7 +313,6 @@ app.post("/categories/add", ensureLogin, upload.single("featureImage"), ensureLo
     }
 });
   
-// delete category
 app.get("/categories/delete/:id", ensureLogin, (req, res) => {
     storeService.deleteCategoryById(req.params.id)
         .then(() => {
@@ -333,14 +324,12 @@ app.get("/categories/delete/:id", ensureLogin, (req, res) => {
         });
 });
 
-// Item details
 app.get("/item/:id", ensureLogin, (req, res) => {
     storeService.getItemById(req.params.id)
         .then((item) => res.render("itemDetails", { item }))
         .catch(() => res.status(404).render("404", { message: "Item not found" }));
 });
 
-// Delete item route
 app.get("/items/delete/:id", ensureLogin, (req, res) => {
     storeService.deletePostById(req.params.id)
         .then(() => {
@@ -348,39 +337,29 @@ app.get("/items/delete/:id", ensureLogin, (req, res) => {
         })
         .catch(err => {
             console.error("Error deleting item:", err);
-            res.status(500).send("Unable to Remove Post / Post not found");
+            res.status(500).send("Cannot remove items");
         });
 });
 
-
 app.get("/login", (req, res) => {
-    res.render("login", {
-      errorMessage: "",
-      userName: ""
-    });
-  });
+    res.render("login");
+});
   
   app.get("/register", (req, res) => {
-    res.render("register", {
-      errorMessage: "",
-      successMessage: "",
-      userName: ""
-    });
-  });
+    res.render("register");
+});
   
   app.post("/register", (req, res) => {
     authData.registerUser(req.body)
       .then(() => {
         res.render("register", {
           errorMessage: "",
-          successMessage: "User created",
-          userName: ""
+          successMessage: "User successfully created",
         });
       })
       .catch((err) => {
         res.render("register", {
           errorMessage: err,
-          successMessage: "",
           userName: req.body.userName
         });
       });
@@ -407,7 +386,7 @@ app.get("/login", (req, res) => {
   });
   
   app.get("/logout", (req, res) => {
-    req.session.reset(); // This destroys the session
+    req.session.reset(); 
     res.redirect("/");
 });
 
@@ -418,7 +397,6 @@ app.get("/login", (req, res) => {
     });
   });
   
-// General 404 handler
 app.use((req, res) => {
     res.status(404).render("404", {
       message: "Unable to find requested project.",
