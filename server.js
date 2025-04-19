@@ -6,8 +6,8 @@ I declare that this assignment is my own work in accordance with Seneca  Academi
 Name: Huynh Huy Hoang
 Student ID: 151569233 
 Date: April 18th, 2025
-Replit Web App URL: https://d039bea6-9f96-404f-a08e-e86e90e97b77-00-k6kxv8ysii1l.riker.replit.dev/
-GitHub Repository URL: https://github.com/Mehi2k5/web322-app
+Replit Web App URL: https://f651af25-fedf-4aa2-8d54-4dcec107f143-00-279tsg877xa3y.worf.replit.dev/
+GitHub Repository URL: https://github.com/Mehi2k5/assignment6
 
 ********************************************************************************/ 
 
